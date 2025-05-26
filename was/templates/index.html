@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}아티스트 포트폴리오 - 홈{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">다양한 재료로 그리는 예술 세계</h1>
+                <p class="lead mb-4">
+                    오일파스텔, 유화, 콘테, 과슈, 연필, 색연필, 동양화물감, 아이패드, 싸인펜 등 
+                    다양한 재료를 활용하여 창작하는 아티스트의 포트폴리오입니다.
+                </p>
+                <div class="mb-4">
+                    <span class="badge bg-secondary me-2">오일파스텔</span>
+                    <span class="badge bg-secondary me-2">유화</span>
+                    <span class="badge bg-secondary me-2">콘테</span>
+                    <span class="badge bg-secondary me-2">과슈</span>
+                    <span class="badge bg-secondary me-2">동양화</span>
+                    <span class="badge bg-secondary me-2">디지털</span>
+                </div>
+                <a href="{{ url_for('portfolio') }}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-images me-2"></i>포트폴리오 보기
+                </a>
+                <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-user me-2"></i>작가 소개
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Works Section -->
+{% if featured_works %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title">주요 작품</h2>
+        <div class="row">
+            {% for work in featured_works %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="portfolio-item">
+                    <div class="card h-100 shadow-sm">
+                        {% if work.image_path %}
+                        <img src="{{ url_for('uploaded_file', filename=work.image_path) }}" 
+                             class="card-img-top portfolio-img" 
+                             alt="{{ work.title }}"
+                             loading="lazy">
+                        {% else %}
+                        <div class="card-img-top portfolio-img bg-light d-flex align-items-center justify-content-center">
+                            <i class="fas fa-image fa-3x text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ work.title }}</h5>
+                            <p class="card-text text-muted small mb-2">
+                                <i class="fas fa-palette me-1"></i>{{ work.medium or '혼합재료' }}
+                                {% if work.category %}
+                                <span class="ms-2">
+                                    <i class="fas fa-tag me-1"></i>{{ work.category }}
+                                </span>
+                                {% endif %}
+                            </p>
+                            {% if work.description %}
+                            <p class="card-text">{{ work.description[:100] }}{% if work.description|length > 100 %}...{% endif %}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Recent Works Section -->
+{% if recent_works %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title">최근 작품</h2>
+        <div class="row">
+            {% for work in recent_works %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="portfolio-item">
+                    <div class="card h-100">
+                        {% if work.image_path %}
+                        <img src="{{ url_for('uploaded_file', filename=work.image_path) }}" 
+                             class="card-img-top" 
+                             style="height: 200px; object-fit: cover;"
+                             alt="{{ work.title }}"
+                             loading="lazy">
+                        {% else %}
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" 
+                             style="height: 200px;">
+                            <i class="fas fa-image fa-2x text-white"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body p-3">
+                            <h6 class="card-title mb-1">{{ work.title }}</h6>
+                            <small class="text-muted">
+                                <i class="fas fa-palette me-1"></i>{{ work.medium or '혼합재료' }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('portfolio') }}" class="btn btn-primary">
+                <i class="fas fa-arrow-right me-2"></i>모든 작품 보기
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-4">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <i class="fas fa-palette fa-3x text-primary mb-3"></i>
+                        <h3 class="fw-bold">6+</h3>
+                        <p class="text-muted">다양한 재료</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <i class="fas fa-globe fa-3x text-primary mb-3"></i>
+                        <h3 class="fw-bold">25+</h3>
+                        <p class="text-muted">방문 국가</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <i class="fas fa-music fa-3x text-primary mb-3"></i>
+                        <h3 class="fw-bold">3</h3>
+                        <p class="text-muted">연주 악기</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <i class="fas fa-certificate fa-3x text-primary mb-3"></i>
+                        <h3 class="fw-bold">4</h3>
+                        <p class="text-muted">전문 자격증</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-3">작품 문의 및 협업</h2>
+        <p class="lead mb-4">작품 구매, 전시 협업, 개인 레슨 등 언제든 연락주세요.</p>
+        <a href="{{ url_for('contact') }}" class="btn btn-light btn-lg">
+            <i class="fas fa-envelope me-2"></i>연락하기
+        </a>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Lazy loading for images
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    imageObserver.unobserve(img);
+                }
+            });
+        });
+
+        const images = document.querySelectorAll('img[data-src]');
+        images.forEach(img => imageObserver.observe(img));
+    }
+
+    // Portfolio item hover effects
+    document.querySelectorAll('.portfolio-item').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+</script>
+{% endblock %}

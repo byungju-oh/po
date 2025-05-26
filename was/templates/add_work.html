@@ -1,0 +1,621 @@
+{% extends "base.html" %}
+
+{% block title %}새 작품 추가 - 관리자{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2 mb-1">새 작품 추가</h1>
+                    <p class="text-muted mb-0">포트폴리오에 새로운 작품을 추가해보세요</p>
+                </div>
+                <a href="{{ url_for('admin') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>관리자로 돌아가기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Form -->
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-plus me-2"></i>작품 정보 입력
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="addWorkForm" method="POST" enctype="multipart/form-data" action="{{ url_for('add_work') }}">
+                        <!-- 기본 정보 -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-info-circle me-1"></i>기본 정보
+                                </h6>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label for="title" class="form-label">작품명 *</label>
+                                <input type="text" class="form-control" id="title" name="title" 
+                                       placeholder="작품의 제목을 입력하세요" required>
+                                <div class="form-text">사용자에게 표시될 작품의 제목입니다.</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="category" class="form-label">카테고리</label>
+                                <select class="form-select" id="category" name="category">
+                                    <option value="">카테고리 선택</option>
+                                    <option value="풍경화">풍경화</option>
+                                    <option value="인물화">인물화</option>
+                                    <option value="정물화">정물화</option>
+                                    <option value="추상화">추상화</option>
+                                    <option value="일러스트">일러스트</option>
+                                    <option value="디지털아트">디지털아트</option>
+                                    <option value="스케치">스케치</option>
+                                    <option value="기타">기타</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 재료 및 기법 -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-palette me-1"></i>재료 및 기법
+                                </h6>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="medium" class="form-label">주요 재료</label>
+                                <select class="form-select" id="medium" name="medium">
+                                    <option value="">재료 선택</option>
+                                    <option value="오일파스텔">오일파스텔</option>
+                                    <option value="유화">유화</option>
+                                    <option value="콘테">콘테</option>
+                                    <option value="과슈">과슈</option>
+                                    <option value="연필">연필</option>
+                                    <option value="색연필">색연필</option>
+                                    <option value="동양화물감">동양화물감</option>
+                                    <option value="아이패드">아이패드 (디지털)</option>
+                                    <option value="싸인펜">싸인펜</option>
+                                    <option value="혼합재료">혼합재료</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="size" class="form-label">작품 크기</label>
+                                <input type="text" class="form-control" id="size" name="size" 
+                                       placeholder="예: 40cm x 30cm">
+                            </div>
+                        </div>
+
+                        <!-- 작품 설명 -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-file-text me-1"></i>작품 설명
+                            </h6>
+                            <label for="description" class="form-label">상세 설명</label>
+                            <textarea class="form-control" id="description" name="description" rows="4"
+                                      placeholder="작품에 대한 설명, 제작 배경, 의도 등을 자유롭게 작성해주세요..."></textarea>
+                            <div class="form-text">작품의 컨셉, 제작 과정, 영감 등을 포함해주세요.</div>
+                        </div>
+
+                        <!-- 이미지 업로드 -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-image me-1"></i>작품 이미지
+                            </h6>
+                            <label for="image" class="form-label">이미지 파일</label>
+                            <input type="file" class="form-control" id="image" name="image" 
+                                   accept="image/*" onchange="previewImage(this)">
+                            <div class="form-text">
+                                JPG, PNG, GIF 파일을 업로드할 수 있습니다. (최대 10MB)
+                            </div>
+                            
+                            <!-- 이미지 미리보기 -->
+                            <div id="imagePreviewContainer" class="mt-3" style="display: none;">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <img id="imagePreview" src="" alt="미리보기" 
+                                             class="img-fluid rounded" style="max-height: 300px;">
+                                        <div class="mt-2">
+                                            <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                    onclick="removeImage()">
+                                                <i class="fas fa-times me-1"></i>이미지 제거
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 추가 옵션 -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-cog me-1"></i>추가 옵션
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured">
+                                        <label class="form-check-label" for="is_featured">
+                                            <i class="fas fa-star text-warning me-1"></i>주요 작품으로 설정
+                                        </label>
+                                        <div class="form-text">메인 페이지에 우선적으로 표시됩니다.</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="sort_order" class="form-label">정렬 순서</label>
+                                    <input type="number" class="form-control" id="sort_order" name="sort_order" 
+                                           value="0" min="0">
+                                    <div class="form-text">숫자가 작을수록 먼저 표시됩니다.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 제출 버튼 -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('admin') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>취소
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>작품 저장
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 도움말 사이드바 -->
+        <div class="col-lg-4">
+            <!-- 작성 가이드 -->
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>작성 가이드
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="guide-item mb-3">
+                        <h6 class="text-primary">📝 작품명 작성 팁</h6>
+                        <ul class="small text-muted mb-0">
+                            <li>간결하고 의미있는 제목</li>
+                            <li>한글/영문 모두 가능</li>
+                            <li>특수문자는 최소화</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="guide-item mb-3">
+                        <h6 class="text-success">🎨 재료별 특징</h6>
+                        <ul class="small text-muted mb-0">
+                            <li><strong>오일파스텔:</strong> 부드럽고 진한 색감</li>
+                            <li><strong>유화:</strong> 깊이 있는 표현</li>
+                            <li><strong>콘테:</strong> 자연스러운 질감</li>
+                            <li><strong>디지털:</strong> 정확하고 선명한 표현</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <h6 class="text-info">📷 이미지 업로드 권장사항</h6>
+                        <ul class="small text-muted mb-0">
+                            <li>해상도: 1200px 이상</li>
+                            <li>파일 형식: JPG, PNG</li>
+                            <li>조명이 좋은 환경에서 촬영</li>
+                            <li>작품 전체가 보이도록 구성</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 최근 추가된 작품 -->
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>최근 추가된 작품
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_works %}
+                    {% for work in recent_works[:3] %}
+                    <div class="d-flex align-items-center mb-3">
+                        {% if work.image_path %}
+                        <img src="{{ url_for('uploaded_file', filename=work.image_path) }}" 
+                             class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                        {% else %}
+                        <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center" 
+                             style="width: 50px; height: 50px;">
+                            <i class="fas fa-image text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h6 class="mb-1">{{ work.title }}</h6>
+                            <small class="text-muted">{{ work.created_at.strftime('%m월 %d일') }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="text-center text-muted">
+                        <i class="fas fa-image fa-2x mb-2"></i>
+                        <p>첫 번째 작품을 추가해보세요!</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.guide-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.guide-item:last-child {
+    border-bottom: none;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.card {
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+#imagePreviewContainer {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+}
+</style>
+
+<script>
+// 이미지 미리보기 함수
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            document.getElementById('imagePreview').src = e.target.result;
+            document.getElementById('imagePreviewContainer').style.display = 'block';
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+        
+        // 파일 크기 체크 (10MB)
+        if (input.files[0].size > 10 * 1024 * 1024) {
+            alert('파일 크기가 10MB를 초과합니다. 더 작은 파일을 선택해주세요.');
+            input.value = '';
+            removeImage();
+            return;
+        }
+    }
+}
+
+// 이미지 제거 함수
+function removeImage() {
+    document.getElementById('image').value = '';
+    document.getElementById('imagePreviewContainer').style.display = 'none';
+    document.getElementById('imagePreview').src = '';
+}
+
+// 폼 제출 처리
+document.getElementById('addWorkForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // 기본 유효성 검사
+    const title = document.getElementById('title').value.trim();
+    if (!title) {
+        alert('작품명을 입력해주세요.');
+        document.getElementById('title').focus();
+        return;
+    }
+    
+    // 이미지 파일 체크
+    const imageFile = document.getElementById('image').files[0];
+    if (!imageFile) {
+        if (!confirm('이미지 없이 작품을 등록하시겠습니까?')) {
+            return;
+        }
+    }
+    
+    // 제출 버튼 상태 변경
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>저장 중...';
+    submitBtn.disabled = true;
+    
+    // FormData 생성 및 제출
+    const formData = new FormData(this);
+    
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok');
+    })
+    .then(data => {
+        if (data.success) {
+            alert('작품이 성공적으로 추가되었습니다!');
+            window.location.href = '{{ url_for("admin") }}';
+        } else {
+            alert('오류가 발생했습니다: ' + (data.message || '알 수 없는 오류'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('작품 추가 중 오류가 발생했습니다.');
+    })
+    .finally(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    });
+});
+
+// 카테고리별 추천 재료 자동 선택
+document.getElementById('category').addEventListener('change', function() {
+    const category = this.value;
+    const mediumSelect = document.getElementById('medium');
+    
+    const recommendations = {
+        '풍경화': '유화',
+        '인물화': '오일파스텔',
+        '정물화': '과슈',
+        '추상화': '혼합재료',
+        '일러스트': '색연필',
+        '디지털아트': '아이패드',
+        '스케치': '연필'
+    };
+    
+    if (recommendations[category] && !mediumSelect.value) {
+        mediumSelect.value = recommendations[category];
+        
+        // 부드러운 하이라이트 효과
+        mediumSelect.style.background = '#fff3cd';
+        setTimeout(() => {
+            mediumSelect.style.background = '';
+        }, 1000);
+    }
+});
+
+// 제목 자동 완성 도우미
+document.getElementById('title').addEventListener('input', function() {
+    const title = this.value;
+    const category = document.getElementById('category').value;
+    const medium = document.getElementById('medium').value;
+    
+    // 제목 길이에 따른 가이드
+    if (title.length > 50) {
+        this.style.borderColor = '#ffc107';
+        if (!document.querySelector('.title-warning')) {
+            const warning = document.createElement('div');
+            warning.className = 'form-text text-warning title-warning';
+            warning.textContent = '제목이 너무 길 수 있습니다. (50자 이하 권장)';
+            this.parentNode.appendChild(warning);
+        }
+    } else {
+        this.style.borderColor = '';
+        const warning = document.querySelector('.title-warning');
+        if (warning) warning.remove();
+    }
+});
+
+// 설명 글자 수 카운터
+const descriptionTextarea = document.getElementById('description');
+const maxLength = 500;
+
+descriptionTextarea.addEventListener('input', function() {
+    const currentLength = this.value.length;
+    
+    let counter = this.parentNode.querySelector('.char-counter');
+    if (!counter) {
+        counter = document.createElement('div');
+        counter.className = 'form-text char-counter';
+        this.parentNode.appendChild(counter);
+    }
+    
+    counter.innerHTML = `${currentLength}/${maxLength}자 <span class="text-muted">(${maxLength - currentLength}자 남음)</span>`;
+    
+    if (currentLength > maxLength * 0.9) {
+        counter.className = 'form-text char-counter text-warning';
+    } else {
+        counter.className = 'form-text char-counter text-muted';
+    }
+});
+
+// 페이지 이탈 방지 (작성 중인 내용이 있을 때)
+let formChanged = false;
+
+document.querySelectorAll('#addWorkForm input, #addWorkForm textarea, #addWorkForm select').forEach(element => {
+    element.addEventListener('change', () => {
+        formChanged = true;
+    });
+});
+
+window.addEventListener('beforeunload', function(e) {
+    if (formChanged) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+    }
+});
+
+// 폼 제출 시 이탈 방지 해제
+document.getElementById('addWorkForm').addEventListener('submit', function() {
+    formChanged = false;
+});
+
+// 드래그 앤 드롭 이미지 업로드
+const imageInput = document.getElementById('image');
+const form = document.getElementById('addWorkForm');
+
+// 드래그 오버 이벤트
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    form.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+// 드래그 효과
+['dragenter', 'dragover'].forEach(eventName => {
+    form.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    form.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    form.classList.add('drag-over');
+}
+
+function unhighlight(e) {
+    form.classList.remove('drag-over');
+}
+
+// 드롭 처리
+form.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    
+    if (files.length > 0 && files[0].type.startsWith('image/')) {
+        imageInput.files = files;
+        previewImage(imageInput);
+    }
+}
+
+// 자동 저장 기능 (임시)
+let autoSaveInterval;
+
+function startAutoSave() {
+    autoSaveInterval = setInterval(() => {
+        const formData = new FormData(document.getElementById('addWorkForm'));
+        const autoSaveData = {};
+        
+        for (let [key, value] of formData.entries()) {
+            if (key !== 'image') { // 이미지는 제외
+                autoSaveData[key] = value;
+            }
+        }
+        
+        localStorage.setItem('autoSave_addWork', JSON.stringify(autoSaveData));
+        
+        // 자동 저장 표시
+        showAutoSaveIndicator();
+    }, 30000); // 30초마다 자동 저장
+}
+
+function showAutoSaveIndicator() {
+    const indicator = document.createElement('div');
+    indicator.className = 'alert alert-info alert-dismissible fade show position-fixed';
+    indicator.style.cssText = 'top: 20px; right: 20px; z-index: 9999; width: auto;';
+    indicator.innerHTML = `
+        <i class="fas fa-save me-2"></i>임시 저장됨
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(indicator);
+    
+    setTimeout(() => {
+        if (indicator.parentNode) {
+            indicator.remove();
+        }
+    }, 3000);
+}
+
+// 페이지 로드 시 자동 저장된 데이터 복원
+document.addEventListener('DOMContentLoaded', function() {
+    const autoSaveData = localStorage.getItem('autoSave_addWork');
+    if (autoSaveData) {
+        try {
+            const data = JSON.parse(autoSaveData);
+            if (confirm('이전에 작성하던 내용이 있습니다. 복원하시겠습니까?')) {
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'checkbox') {
+                            element.checked = data[key] === 'on';
+                        } else {
+                            element.value = data[key];
+                        }
+                    }
+                });
+            }
+            localStorage.removeItem('autoSave_addWork');
+        } catch (e) {
+            console.error('자동 저장 데이터 복원 중 오류:', e);
+        }
+    }
+    
+    startAutoSave();
+});
+
+// 페이지 언로드 시 자동 저장 중지
+window.addEventListener('beforeunload', function() {
+    if (autoSaveInterval) {
+        clearInterval(autoSaveInterval);
+    }
+});
+</script>
+
+<style>
+.drag-over {
+    background-color: rgba(0, 123, 255, 0.1);
+    border: 2px dashed #007bff;
+}
+
+.form-floating {
+    position: relative;
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 0.875rem;
+}
+
+.guide-item ul {
+    padding-left: 1rem;
+}
+
+.recent-work-item {
+    transition: background-color 0.3s ease;
+}
+
+.recent-work-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+</style>
+{% endblock %}

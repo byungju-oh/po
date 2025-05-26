@@ -1,0 +1,454 @@
+{% extends "base.html" %}
+
+{% block title %}소개 - 아티스트 포트폴리오{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Profile Section -->
+    <section class="py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-center mb-4 mb-lg-0">
+                <div class="profile-image-container">
+                    <img src="/static/images/profile.jpg" 
+                         alt="아티스트 프로필" 
+                         class="profile-image img-fluid rounded-circle shadow-lg"
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEyMCIgcj0iNDAiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTEwMCAyMDBIMjAwQzIwMCAxNzggMTc4IDE2MCAxNTAgMTYwQzEyMiAxNjAgMTAwIDE3OCAxMDAgMjAwWiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4='">
+                </div>
+                <h2 class="mt-3 mb-2">아티스트</h2>
+                <p class="text-muted">다양한 재료로 그리는 화가</p>
+            </div>
+            <div class="col-lg-8">
+                <h1 class="display-5 mb-4">안녕하세요!</h1>
+                <p class="lead mb-4">
+                    저는 <strong>오일파스텔, 유화, 콘테, 과슈, 연필, 색연필, 동양화물감, 아이패드, 싸인펜</strong> 등 
+                    다양한 재료를 활용하여 그림을 그리는 아티스트입니다.
+                </p>
+                <p class="mb-4">
+                    각 재료만의 독특한 특성을 살려 다채로운 표현을 추구하며, 
+                    전통적인 재료부터 디지털 매체까지 폭넓게 활용하여 작품 활동을 하고 있습니다.
+                </p>
+                
+                <!-- Skills -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="mb-3"><i class="fas fa-palette me-2"></i>주요 재료</h5>
+                        <div class="skill-tags">
+                            <span class="badge bg-primary me-2 mb-2">오일파스텔</span>
+                            <span class="badge bg-success me-2 mb-2">유화</span>
+                            <span class="badge bg-warning me-2 mb-2">콘테</span>
+                            <span class="badge bg-danger me-2 mb-2">과슈</span>
+                            <span class="badge bg-info me-2 mb-2">연필</span>
+                            <span class="badge bg-secondary me-2 mb-2">색연필</span>
+                            <span class="badge bg-dark me-2 mb-2">동양화물감</span>
+                            <span class="badge bg-purple me-2 mb-2">아이패드</span>
+                            <span class="badge bg-teal me-2 mb-2">싸인펜</span>
+                        </div>
+                    </div>
+
+                    <!-- 영국 축구 에피소드 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="uk-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uk-collapse">
+                                🇬🇧 영국 - 토트넘 경기 관람
+                            </button>
+                        </h2>
+                        <div id="uk-collapse" class="accordion-collapse collapse" data-bs-parent="#travelAccordion">
+                            <div class="accordion-body">
+                                아일랜드 여행을 하다가 축구를 보고 싶어하는 사람을 만나서 함께 영국으로 건너가 
+                                토트넘 경기를 보았습니다. 예상치 못한 일정이었지만 정말 잊지 못할 경험이었습니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-4 bg-primary text-white rounded">
+                    <h5><i class="fas fa-lightbulb me-2"></i>여행 철학</h5>
+                    <p class="mb-0">
+                        "일단 실행하다 보면 많은 것들이 해결 가능해진다"는 것을 여행을 통해 많이 느꼈습니다. 
+                        계획보다는 순간의 직감과 용기가 더 소중한 경험을 만들어 준다고 믿습니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Art Philosophy Section -->
+    <section class="py-5 bg-light rounded">
+        <div class="container">
+            <h2 class="text-center section-title mb-5">
+                <i class="fas fa-paint-brush me-2"></i>작업 철학
+            </h2>
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-palette me-2 text-primary"></i>다양성
+                            </h5>
+                            <p class="card-text">
+                                하나의 재료에 국한되지 않고 다양한 매체를 활용하여 
+                                각각의 특성을 살린 독창적인 표현을 추구합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-heart me-2 text-danger"></i>감정 표현
+                            </h5>
+                            <p class="card-text">
+                                여행에서 얻은 다양한 경험과 감정을 작품에 담아 
+                                보는 이들과 공감할 수 있는 작품을 만들고자 합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-rocket me-2 text-success"></i>도전 정신
+                            </h5>
+                            <p class="card-text">
+                                새로운 기법과 재료에 대한 끊임없는 탐구를 통해 
+                                예술적 경계를 넓혀가고 있습니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-users me-2 text-info"></i>소통
+                            </h5>
+                            <p class="card-text">
+                                작품을 통해 관람자와 소통하며, 각자의 감정과 
+                                이야기를 나눌 수 있는 공간을 만들고자 합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="py-5 text-center">
+        <h2 class="mb-3">함께 작업하고 싶으신가요?</h2>
+        <p class="lead mb-4">작품 의뢰, 전시 협업, 개인 레슨 등 언제든 연락주세요.</p>
+        <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-envelope me-2"></i>연락하기
+        </a>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.profile-image {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border: 5px solid #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.profile-image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-image-container::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 2px solid var(--accent-color);
+    border-radius: 50%;
+    opacity: 0.5;
+}
+
+.skill-tags .badge {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    font-weight: 500;
+}
+
+.country-badge {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    margin: 2px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.country-badge:hover {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+.accordion-button {
+    font-weight: 600;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.accordion-button:not(.collapsed) {
+    background: var(--primary-color);
+    color: white;
+}
+
+.accordion-body {
+    line-height: 1.7;
+    color: #666;
+}
+
+.bg-purple { background-color: #6f42c1 !important; }
+.bg-teal { background-color: #20c997 !important; }
+
+@media (max-width: 768px) {
+    .profile-image {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .country-badge {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 애니메이션 효과
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    });
+
+    document.querySelectorAll('.card, .accordion-item').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.6s ease';
+        observer.observe(el);
+    });
+
+    // 국가 배지 호버 효과
+    document.querySelectorAll('.country-badge').forEach(badge => {
+        badge.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px) scale(1.05)';
+        });
+        
+        badge.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    // 프로필 이미지 로딩 에러 처리
+    const profileImg = document.querySelector('.profile-image');
+    if (profileImg) {
+        profileImg.addEventListener('error', function() {
+            this.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            this.alt = '프로필 이미지';
+        });
+    }
+});
+</script>
+{% endblock %}>
+                    <div class="col-md-6">
+                        <h5 class="mb-3"><i class="fas fa-music me-2"></i>음악</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-music me-2"></i>클라리넷</li>
+                            <li><i class="fas fa-music me-2"></i>피아노</li>
+                            <li><i class="fas fa-music me-2"></i>바이올린</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section class="py-5 bg-light rounded">
+        <div class="container">
+            <h2 class="text-center section-title mb-5">
+                <i class="fas fa-certificate me-2"></i>보유 자격증
+            </h2>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-database fa-3x text-primary mb-3"></i>
+                            <h5>SQLD</h5>
+                            <p class="text-muted small">SQL 개발자</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-cloud fa-3x text-success mb-3"></i>
+                            <h5>CKA</h5>
+                            <p class="text-muted small">Certified Kubernetes Administrator</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-chart-bar fa-3x text-warning mb-3"></i>
+                            <h5>빅데이터분석기사</h5>
+                            <p class="text-muted small">Big Data Analytics Engineer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-code fa-3x text-info mb-3"></i>
+                            <h5>정보처리기사</h5>
+                            <p class="text-muted small">Information Processing Engineer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Experiences Section -->
+    <section class="py-5">
+        <h2 class="text-center section-title mb-5">
+            <i class="fas fa-globe-americas me-2"></i>여행 경험
+        </h2>
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <p class="lead">25개국 이상을 여행하며 다양한 문화와 예술을 경험했습니다.</p>
+            </div>
+        </div>
+        
+        <!-- Country Badges -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="country-container text-center">
+                    {% set countries = [
+                        {'name': '일본', 'flag': '🇯🇵'}, {'name': '중국', 'flag': '🇨🇳'}, 
+                        {'name': '싱가폴', 'flag': '🇸🇬'}, {'name': '캐나다', 'flag': '🇨🇦'}, 
+                        {'name': '호주', 'flag': '🇦🇺'}, {'name': '뉴질랜드', 'flag': '🇳🇿'}, 
+                        {'name': '핀란드', 'flag': '🇫🇮'}, {'name': '노르웨이', 'flag': '🇳🇴'}, 
+                        {'name': '스웨덴', 'flag': '🇸🇪'}, {'name': '아이슬란드', 'flag': '🇮🇸'}, 
+                        {'name': '영국', 'flag': '🇬🇧'}, {'name': '아일랜드', 'flag': '🇮🇪'}, 
+                        {'name': '프랑스', 'flag': '🇫🇷'}, {'name': '헝가리', 'flag': '🇭🇺'}, 
+                        {'name': '체코', 'flag': '🇨🇿'}, {'name': '오스트리아', 'flag': '🇦🇹'}, 
+                        {'name': '독일', 'flag': '🇩🇪'}, {'name': '벨기에', 'flag': '🇧🇪'}, 
+                        {'name': '네덜란드', 'flag': '🇳🇱'}, {'name': '에스토니아', 'flag': '🇪🇪'}, 
+                        {'name': '스페인', 'flag': '🇪🇸'}, {'name': '이탈리아', 'flag': '🇮🇹'}, 
+                        {'name': '스위스', 'flag': '🇨🇭'}, {'name': '덴마크', 'flag': '🇩🇰'}, 
+                        {'name': '슬로바키아', 'flag': '🇸🇰'}, {'name': '카타르', 'flag': '🇶🇦'}, 
+                        {'name': '두바이', 'flag': '🇦🇪'}
+                    ] %}
+                    
+                    {% for country in countries %}
+                    <span class="country-badge badge bg-light text-dark me-2 mb-2">
+                        {{ country.flag }} {{ country.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Travel Stories -->
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-4"><i class="fas fa-book-open me-2"></i>여행 에피소드</h4>
+                
+                <div class="accordion" id="travelAccordion">
+                    <!-- 독일 에피소드 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="germany-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#germany-collapse">
+                                🇩🇪 독일 - 휴대폰 도난 사건
+                            </button>
+                        </h2>
+                        <div id="germany-collapse" class="accordion-collapse collapse" data-bs-parent="#travelAccordion">
+                            <div class="accordion-body">
+                                독일 여행 중 휴대폰을 도난당해 경찰서에 신고를 했습니다. 의사소통이 원활하지 않았지만 
+                                몽타주를 작성하며 상황을 설명했습니다. 남은 일정이 한 달이나 되었지만, 
+                                당일당일 숙소를 예약하며 무사히 여행을 마칠 수 있었습니다.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 프랑스 에피소드 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="france-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#france-collapse">
+                                🇫🇷 프랑스 - 파리 개선문 즉흥 여행
+                            </button>
+                        </h2>
+                        <div id="france-collapse" class="accordion-collapse collapse" data-bs-parent="#travelAccordion">
+                            <div class="accordion-body">
+                                스페인에서 파리 개선문을 보고 싶어져서 가장 빠른 밤비행기를 타고 출발했습니다. 
+                                숙소 예약 없이 개선문을 구경한 후, 해가 뜰 때까지 잠시 쉬어갈 곳을 찾아 
+                                개선문 앞 호텔들을 돌아다녔습니다. 결국 일반 하루 숙박비보다 저렴하게 
+                                아침까지 머물 수 있는 방을 찾을 수 있었습니다.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 아이슬란드 에피소드 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="iceland-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iceland-collapse">
+                                🇮🇸 아이슬란드 - 오로라 헌팅
+                            </button>
+                        </h2>
+                        <div id="iceland-collapse" class="accordion-collapse collapse" data-bs-parent="#travelAccordion">
+                            <div class="accordion-body">
+                                처음 목적은 오로라를 보는 것이 아니었지만, 아이슬란드를 여행하며 오로라를 보고 싶어졌습니다. 
+                                준비가 되어 있지 않았지만, 오로라 알림을 기다리며 계속 걸어다닌 결과 
+                                결국 환상적인 오로라를 볼 수 있었습니다.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 노르웨이 에피소드 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="norway-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#norway-collapse">
+                                🇳🇴 노르웨이 - 도심 스키 체험
+                            </button>
+                        </h2>
+                        <div id="norway-collapse" class="accordion-collapse collapse" data-bs-parent="#travelAccordion">
+                            <div class="accordion-body">
+                                노르웨이를 여행하다 사람들이 도심에서 스키를 들고 다니는 것을 목격했습니다. 
+                                가까운 거리에 스키를 탈 수 있는 공간이 있다고 생각해서 산을 올라가 보았고, 
+                                실제로 스키를 탈 수 있었습니다. 현지인들과 함께 즐거운 시간을 보냈습니다.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 할슈타트 에피소드 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="hallstatt-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hallstatt-collapse">
+                                🇦🇹 오스트리아 - 할슈타트 우연한 만남
+                            </button>
+                        </h2>
+                        <div id="hallstatt-collapse" class="accordion-collapse collapse" data-bs-parent="#travelAccordion">
+                            <div class="accordion-body">
+                                여행 중 만난 일행이 할슈타트에 가고 싶어했습니다. 당시 휴가철이어서 예약 가능한 숙소가 없었지만 
+                                일단 출발했습니다. 기차를 타고 가다가 목적지가 같은 사람들을 만나 대화를 나누다가 
+                                같은 숙소에 머물러도 된다고 해서 자연스럽게 숙박 문제를 해결할 수 있었습니다.
+                            </div>
+                        </div>
+                    </div

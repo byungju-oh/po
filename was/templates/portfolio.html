@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+
+{% block title %}포트폴리오 - 아티스트 포트폴리오{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Page Header -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 mb-3">포트폴리오</h1>
+            <p class="lead text-muted">다양한 재료와 기법으로 표현한 작품들을 만나보세요</p>
+        </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="{{ url_for('portfolio') }}" 
+                   class="btn btn-filter {{ 'btn-primary' if current_category == 'all' else 'btn-outline-primary' }}">
+                    전체
+                </a>
+                {% for category in categories %}
+                <a href="{{ url_for('portfolio', category=category) }}" 
+                   class="btn btn-filter {{ 'btn-primary' if current_category == category else 'btn-outline-primary' }}">
+                    {{ category }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Medium Legend -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body py-3">
+                    <h6 class="card-title mb-3">
+                        <i class="fas fa-palette me-2"></i>사용 재료 범례
+                    </h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-info">오일파스텔</span>
+                        <span class="badge bg-success">유화</span>
+                        <span class="badge bg-warning">콘테</span>
+                        <span class="badge bg-danger">과슈</span>
+                        <span class="badge bg-primary">연필</span>
+                        <span class="badge bg-secondary">색연필</span>
+                        <span class="badge bg-dark">동양화물감</span>
+                        <span class="badge bg-purple">아이패드</span>
+                        <span class="badge bg-teal">싸인펜</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Grid -->
+    {% if works %}
+    <div class="row" id="portfolio-grid">
+        {% for work in works %}
+        <div class="col-lg-4 col-md-6 mb-4 portfolio-item" data-category="{{ work.category or 'uncategorized' }}">
+            <div class="card h-100 shadow-sm portfolio-card">
+                <!-- Image Container -->
+                <div class="position-relative">
+                    {% if work.image_path %}
+                    <img src="{{ url_for('uploaded_file', filename=work.image_path) }}" 
+                         class="card-img-top portfolio-img" 
+                         alt="{{ work.title }}"
+                         loading="lazy">
+                    {% else %}
+                    <div class="card-img-top portfolio-img bg-gradient d-flex align-items-center justify-content-center">
+                        <i class="fas fa-image fa-4x text-white opacity-50"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Overlay -->
+                    <div class="portfolio-overlay">
+                        <div class="portfolio-overlay-content">
+                            <button class="btn btn-light btn-sm me-2" 
+                                    onclick="viewImage('{{ url_for('uploaded_file', filename=work.image_path) if work.image_path else '' }}', '{{ work.title }}')">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            {% if work.description %}
+                            <button class="btn btn-light btn-sm" 
+                                    onclick="showDescription('{{ work.title }}', '{{ work.description|replace('\n', '\\n')|replace('\'', '\\'') }}')">
+                                <i class="fas fa-info"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card Body -->
+                <div class="card-body">
+                    <h5 class="card-title mb-2">{{ work.title }}</h5>
+                    
+                    <!-- Medium and Category -->
+                    <div class="mb-2">
+                        {% if work.medium %}
+                        <span class="badge badge-medium">
+                            <i class="fas fa-brush me-1"></i>{{ work.medium }}
+                        </span>
+                        {% endif %}
+                        {% if work.category %}
+                        <span class="badge bg-light text-dark ms-1">
+                            <i class="fas fa-tag me-1"></i>{{ work.category }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Description Preview -->
+                    {% if work.description %}
+                    <p class="card-text text-muted small">
+                        {{ work.description[:80] }}{% if work.description|length > 80 %}...{% endif %}
+                    </p>
+                    {% endif %}
+                    
+                    <!-- Date -->
+                    <small class="text-muted">
+                        <i class="fas fa-calendar me-1"></i>
+                        {{ work.created_at.strftime('%Y년 %m월') }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="row">
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-images fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">작품이 없습니다</h4>
+            <p class="text-muted">선택한 카테고리에 작품이 없습니다.</p>
+            <a href="{{ url_for('portfolio') }}" class="btn btn-primary">전체 보기</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalTitle">작품 보기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid rounded" alt="작품">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Description Modal -->
+<div class="modal fade" id="descriptionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="descriptionModalTitle">작품 설명</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="descriptionModalContent"></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.portfolio-img {
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.portfolio-card {
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.portfolio-card:hover .portfolio-img {
+    transform: scale(1.05);
+}
+
+.portfolio-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.portfolio-card:hover .portfolio-overlay {
+    opacity: 1;
+}
+
+.btn-filter {
+    margin: 2px;
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.badge-medium {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+}
+
+.bg-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-purple { background-color: #6f42c1 !important; }
+.bg-teal { background-color: #20c997 !important; }
+
+@media (max-width: 768px) {
+    .portfolio-overlay {
+        opacity: 1;
+        background: rgba(0,0,0,0.5);
+    }
+}
+</style>
+
+<script>
+function viewImage(src, title) {
+    if (src) {
+        document.getElementById('modalImage').src = src;
+        document.getElementById('imageModalTitle').textContent = title;
+        new bootstrap.Modal(document.getElementById('imageModal')).show();
+    }
+}
+
+function showDescription(title, description) {
+    document.getElementById('descriptionModalTitle').textContent = title;
+    document.getElementById('descriptionModalContent').textContent = description;
+    new bootstrap.Modal(document.getElementById('descriptionModal')).show();
+}
+
+// Masonry-like layout (optional)
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scroll for filter buttons
+    document.querySelectorAll('.btn-filter').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            if (this.href.includes('#')) {
+                e.preventDefault();
+                // Add smooth transition effect here if needed
+            }
+        });
+    });
+
+    // Lazy loading for portfolio images
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+});
+</script>
+{% endblock %}
