@@ -3,13 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from datetime import datetime, date
+from datetime import datetime, date, timedelta  # timedelta 추가
 import os
 import uuid
 import threading
 import time
 from PIL import Image
 import logging
+import json
 
 app = Flask(__name__)
 
@@ -165,7 +166,6 @@ class DatabaseLock(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# [이전의 락 관련 함수들은 동일하게 유지]
 def get_instance_id():
     """현재 인스턴스의 고유 ID를 반환"""
     return f"{os.getpid()}_{int(time.time() * 1000)}"
@@ -173,13 +173,15 @@ def get_instance_id():
 def acquire_db_lock(lock_name, timeout=300):
     """데이터베이스 레벨에서 락을 획득"""
     instance_id = get_instance_id()
-    expires_at = datetime.utcnow() + datetime.timedelta(seconds=timeout)
+    expires_at = datetime.utcnow() + timedelta(seconds=timeout)  # timedelta 사용
     
     try:
+        # 기존 만료된 락 정리
         db.session.query(DatabaseLock).filter(
             DatabaseLock.expires_at < datetime.utcnow()
         ).delete()
         
+        # 새로운 락 생성 시도
         lock = DatabaseLock(
             lock_name=lock_name,
             locked_by=instance_id,
@@ -282,94 +284,94 @@ def safe_init_db():
 
 def init_default_data():
     """기본 데이터 초기화"""
-    # 기본 관리자 계정
-    admin = User.query.filter_by(username='admin').first()
-    if not admin:
-        admin = User(
-            username='admin',
-            email='admin@example.com',
-            password_hash=generate_password_hash('admin123'),
-            is_admin=True
-        )
-        db.session.add(admin)
-        logger.info("Admin user created")
-    
-    # 기본 기술 스택 데이터
-    default_tech_stacks = [
-        # Programming Languages
-        {'name': 'Python', 'category': 'language', 'icon_class': 'fab fa-python', 'color': '#3776ab', 'proficiency': 90},
-        {'name': 'JavaScript', 'category': 'language', 'icon_class': 'fab fa-js-square', 'color': '#f7df1e', 'proficiency': 85},
-        {'name': 'Java', 'category': 'language', 'icon_class': 'fab fa-java', 'color': '#ed8b00', 'proficiency': 80},
-        {'name': 'Go', 'category': 'language', 'icon_class': 'fas fa-code', 'color': '#00add8', 'proficiency': 75},
-        
-        # Frameworks
-        {'name': 'Django', 'category': 'framework', 'icon_class': 'fas fa-server', 'color': '#092e20', 'proficiency': 85},
-        {'name': 'Flask', 'category': 'framework', 'icon_class': 'fas fa-flask', 'color': '#000000', 'proficiency': 90},
-        {'name': 'React', 'category': 'framework', 'icon_class': 'fab fa-react', 'color': '#61dafb', 'proficiency': 80},
-        {'name': 'Vue.js', 'category': 'framework', 'icon_class': 'fab fa-vuejs', 'color': '#4fc08d', 'proficiency': 75},
-        
-        # Databases
-        {'name': 'PostgreSQL', 'category': 'database', 'icon_class': 'fas fa-database', 'color': '#336791', 'proficiency': 85},
-        {'name': 'MySQL', 'category': 'database', 'icon_class': 'fas fa-database', 'color': '#4479a1', 'proficiency': 90},
-        {'name': 'MongoDB', 'category': 'database', 'icon_class': 'fas fa-leaf', 'color': '#47a248', 'proficiency': 80},
-        {'name': 'Redis', 'category': 'database', 'icon_class': 'fas fa-memory', 'color': '#dc382d', 'proficiency': 85},
-        
-        # Cloud Platforms
-        {'name': 'AWS', 'category': 'cloud', 'icon_class': 'fab fa-aws', 'color': '#ff9900', 'proficiency': 85},
-        {'name': 'Google Cloud', 'category': 'cloud', 'icon_class': 'fab fa-google', 'color': '#4285f4', 'proficiency': 80},
-        {'name': 'Azure', 'category': 'cloud', 'icon_class': 'fab fa-microsoft', 'color': '#0078d4', 'proficiency': 75},
-        
-        # DevOps Tools
-        {'name': 'Docker', 'category': 'devops', 'icon_class': 'fab fa-docker', 'color': '#2496ed', 'proficiency': 90},
-        {'name': 'Kubernetes', 'category': 'devops', 'icon_class': 'fas fa-dharmachakra', 'color': '#326ce5', 'proficiency': 85},
-        {'name': 'Jenkins', 'category': 'devops', 'icon_class': 'fas fa-tools', 'color': '#d33833', 'proficiency': 80},
-        {'name': 'Terraform', 'category': 'devops', 'icon_class': 'fas fa-layer-group', 'color': '#623ce4', 'proficiency': 85},
-        
-        # Data & AI
-        {'name': 'Pandas', 'category': 'data', 'icon_class': 'fas fa-chart-bar', 'color': '#150458', 'proficiency': 90},
-        {'name': 'NumPy', 'category': 'data', 'icon_class': 'fas fa-calculator', 'color': '#013243', 'proficiency': 85},
-        {'name': 'TensorFlow', 'category': 'ai', 'icon_class': 'fas fa-brain', 'color': '#ff6f00', 'proficiency': 80},
-        {'name': 'PyTorch', 'category': 'ai', 'icon_class': 'fas fa-fire', 'color': '#ee4c2c', 'proficiency': 75},
-    ]
-    
-    for tech_data in default_tech_stacks:
-        existing = TechStack.query.filter_by(name=tech_data['name']).first()
-        if not existing:
-            tech = TechStack(**tech_data)
-            db.session.add(tech)
-    
-    # 기본 자격증 데이터
-    default_certifications = [
-        {
-            'name': 'AWS Certified Solutions Architect',
-            'issuer': 'Amazon Web Services',
-            'issue_date': date(2023, 6, 15),
-            'category': 'cloud',
-            'is_featured': True
-        },
-        {
-            'name': 'Certified Kubernetes Administrator (CKA)',
-            'issuer': 'Cloud Native Computing Foundation',
-            'issue_date': date(2023, 8, 20),
-            'category': 'devops',
-            'is_featured': True
-        },
-        {
-            'name': '정보처리기사',
-            'issuer': '한국산업인력공단',
-            'issue_date': date(2022, 11, 25),
-            'category': 'general',
-            'is_featured': True
-        }
-    ]
-    
-    for cert_data in default_certifications:
-        existing = Certification.query.filter_by(name=cert_data['name']).first()
-        if not existing:
-            cert = Certification(**cert_data)
-            db.session.add(cert)
-    
     try:
+        # 기본 관리자 계정
+        admin = User.query.filter_by(username='admin').first()
+        if not admin:
+            admin = User(
+                username='admin',
+                email='admin@example.com',
+                password_hash=generate_password_hash('admin123'),
+                is_admin=True
+            )
+            db.session.add(admin)
+            logger.info("Admin user created")
+        
+        # 기본 기술 스택 데이터
+        default_tech_stacks = [
+            # Programming Languages
+            {'name': 'Python', 'category': 'language', 'icon_class': 'fab fa-python', 'color': '#3776ab', 'proficiency': 90, 'is_primary': True},
+            {'name': 'JavaScript', 'category': 'language', 'icon_class': 'fab fa-js-square', 'color': '#f7df1e', 'proficiency': 85, 'is_primary': True},
+            {'name': 'Java', 'category': 'language', 'icon_class': 'fab fa-java', 'color': '#ed8b00', 'proficiency': 80},
+            {'name': 'Go', 'category': 'language', 'icon_class': 'fas fa-code', 'color': '#00add8', 'proficiency': 75},
+            
+            # Frameworks
+            {'name': 'Django', 'category': 'framework', 'icon_class': 'fas fa-server', 'color': '#092e20', 'proficiency': 85},
+            {'name': 'Flask', 'category': 'framework', 'icon_class': 'fas fa-flask', 'color': '#000000', 'proficiency': 90},
+            {'name': 'React', 'category': 'framework', 'icon_class': 'fab fa-react', 'color': '#61dafb', 'proficiency': 80, 'is_primary': True},
+            {'name': 'Vue.js', 'category': 'framework', 'icon_class': 'fab fa-vuejs', 'color': '#4fc08d', 'proficiency': 75},
+            
+            # Databases
+            {'name': 'PostgreSQL', 'category': 'database', 'icon_class': 'fas fa-database', 'color': '#336791', 'proficiency': 85},
+            {'name': 'MySQL', 'category': 'database', 'icon_class': 'fas fa-database', 'color': '#4479a1', 'proficiency': 90},
+            {'name': 'MongoDB', 'category': 'database', 'icon_class': 'fas fa-leaf', 'color': '#47a248', 'proficiency': 80},
+            {'name': 'Redis', 'category': 'database', 'icon_class': 'fas fa-memory', 'color': '#dc382d', 'proficiency': 85},
+            
+            # Cloud Platforms
+            {'name': 'AWS', 'category': 'cloud', 'icon_class': 'fab fa-aws', 'color': '#ff9900', 'proficiency': 85, 'is_primary': True},
+            {'name': 'Google Cloud', 'category': 'cloud', 'icon_class': 'fab fa-google', 'color': '#4285f4', 'proficiency': 80},
+            {'name': 'Azure', 'category': 'cloud', 'icon_class': 'fab fa-microsoft', 'color': '#0078d4', 'proficiency': 75},
+            
+            # DevOps Tools
+            {'name': 'Docker', 'category': 'devops', 'icon_class': 'fab fa-docker', 'color': '#2496ed', 'proficiency': 90, 'is_primary': True},
+            {'name': 'Kubernetes', 'category': 'devops', 'icon_class': 'fas fa-dharmachakra', 'color': '#326ce5', 'proficiency': 85, 'is_primary': True},
+            {'name': 'Jenkins', 'category': 'devops', 'icon_class': 'fas fa-tools', 'color': '#d33833', 'proficiency': 80},
+            {'name': 'Terraform', 'category': 'devops', 'icon_class': 'fas fa-layer-group', 'color': '#623ce4', 'proficiency': 85},
+            
+            # Data & AI
+            {'name': 'Pandas', 'category': 'data', 'icon_class': 'fas fa-chart-bar', 'color': '#150458', 'proficiency': 90},
+            {'name': 'NumPy', 'category': 'data', 'icon_class': 'fas fa-calculator', 'color': '#013243', 'proficiency': 85},
+            {'name': 'TensorFlow', 'category': 'ai', 'icon_class': 'fas fa-brain', 'color': '#ff6f00', 'proficiency': 80},
+            {'name': 'PyTorch', 'category': 'ai', 'icon_class': 'fas fa-fire', 'color': '#ee4c2c', 'proficiency': 75},
+        ]
+        
+        for tech_data in default_tech_stacks:
+            existing = TechStack.query.filter_by(name=tech_data['name']).first()
+            if not existing:
+                tech = TechStack(**tech_data)
+                db.session.add(tech)
+        
+        # 기본 자격증 데이터
+        default_certifications = [
+            {
+                'name': 'AWS Certified Solutions Architect',
+                'issuer': 'Amazon Web Services',
+                'issue_date': date(2023, 6, 15),
+                'category': 'cloud',
+                'is_featured': True
+            },
+            {
+                'name': 'Certified Kubernetes Administrator (CKA)',
+                'issuer': 'Cloud Native Computing Foundation',
+                'issue_date': date(2023, 8, 20),
+                'category': 'devops',
+                'is_featured': True
+            },
+            {
+                'name': '정보처리기사',
+                'issuer': '한국산업인력공단',
+                'issue_date': date(2022, 11, 25),
+                'category': 'general',
+                'is_featured': True
+            }
+        ]
+        
+        for cert_data in default_certifications:
+            existing = Certification.query.filter_by(name=cert_data['name']).first()
+            if not existing:
+                cert = Certification(**cert_data)
+                db.session.add(cert)
+        
         db.session.commit()
         logger.info("Default data initialized")
     except Exception as e:
@@ -492,7 +494,7 @@ def about():
 def contact():
     return render_template('contact.html')
 
-# [관리자 관련 라우트들은 기존과 유사하지만 프로젝트 중심으로 수정]
+# 관리자 관련 라우트들
 @app.route('/admin')
 @login_required
 def admin():
@@ -506,12 +508,139 @@ def admin():
     experiences = Experience.query.order_by(Experience.created_at.desc()).all()
     
     return render_template('admin.html', 
+                         works=projects,  # 기존 템플릿 호환성을 위해 works로도 전달
                          projects=projects,
                          tech_stacks=tech_stacks,
                          certifications=certifications,
                          experiences=experiences)
 
-# [기존의 다른 라우트들과 헬스체크 등은 동일하게 유지]
+@app.route('/admin/add_work', methods=['GET', 'POST'])
+@login_required
+def add_work():
+    if not current_user.is_admin:
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        try:
+            # 기본 정보
+            title = request.form.get('title', '').strip()
+            description = request.form.get('description', '').strip()
+            detailed_description = request.form.get('detailed_description', '').strip()
+            project_type = request.form.get('project_type', '').strip()
+            category = request.form.get('category', '').strip()
+            my_role = request.form.get('my_role', '').strip()
+            
+            # 기술 스택
+            tech_stack = request.form.get('tech_stack', '').strip()
+            
+            # 링크 정보
+            github_url = request.form.get('github_url', '').strip()
+            demo_url = request.form.get('demo_url', '').strip()
+            video_url = request.form.get('video_url', '').strip()
+            
+            # 프로젝트 기간
+            start_date_str = request.form.get('start_date')
+            end_date_str = request.form.get('end_date')
+            team_size_str = request.form.get('team_size')
+            
+            # 성과
+            achievements = request.form.get('achievements', '').strip()
+            metrics = request.form.get('metrics', '').strip()
+            
+            # 설정
+            is_featured = 'is_featured' in request.form
+            is_public = 'is_public' in request.form
+            sort_order = int(request.form.get('sort_order', 0))
+            
+            # 날짜 파싱
+            start_date = None
+            end_date = None
+            if start_date_str:
+                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+            if end_date_str and 'is_ongoing' not in request.form:
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            
+            # 팀 크기 파싱
+            team_size = None
+            if team_size_str and team_size_str.isdigit():
+                team_size = int(team_size_str)
+            
+            # 파일 업로드 처리
+            image_path = None
+            if 'image' in request.files:
+                file = request.files['image']
+                if file and file.filename:
+                    filename = secure_filename(file.filename)
+                    name, ext = os.path.splitext(filename)
+                    filename = f"{name}_{int(datetime.now().timestamp())}{ext}"
+                    
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+                    file.save(file_path)
+                    
+                    # 이미지 최적화
+                    try:
+                        with Image.open(file_path) as img:
+                            if img.width > 1200:
+                                ratio = 1200 / img.width
+                                new_height = int(img.height * ratio)
+                                img = img.resize((1200, new_height), Image.Resampling.LANCZOS)
+                                img.save(file_path, optimize=True, quality=85)
+                    except Exception as e:
+                        logger.error(f"Image processing error: {e}")
+                    
+                    image_path = filename
+            
+            # 프로젝트 생성
+            project = Project(
+                title=title,
+                description=description,
+                detailed_description=detailed_description,
+                project_type=project_type,
+                category=category,
+                tech_stack=tech_stack,
+                github_url=github_url if github_url else None,
+                demo_url=demo_url if demo_url else None,
+                video_url=video_url if video_url else None,
+                start_date=start_date,
+                end_date=end_date,
+                team_size=team_size,
+                my_role=my_role if my_role else None,
+                achievements=achievements if achievements else None,
+                metrics=metrics if metrics else None,
+                image_path=image_path,
+                is_featured=is_featured,
+                is_public=is_public,
+                sort_order=sort_order
+            )
+            
+            db.session.add(project)
+            db.session.commit()
+            
+            if request.is_json:
+                return jsonify({'success': True, 'message': '프로젝트가 추가되었습니다.'})
+            
+            flash('프로젝트가 추가되었습니다.', 'success')
+            return redirect(url_for('admin'))
+            
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error adding project: {e}")
+            
+            if request.is_json:
+                return jsonify({'success': False, 'message': str(e)}), 500
+            
+            flash(f'프로젝트 추가 중 오류가 발생했습니다: {str(e)}', 'error')
+            return redirect(url_for('add_work'))
+    
+    # GET 요청시 최근 프로젝트들을 가져와서 템플릿에 전달
+    recent_works = Project.query.order_by(Project.created_at.desc()).limit(3).all()
+    return render_template('add_work.html', recent_works=recent_works)
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 @app.route('/health')
 def health():
     try:
@@ -560,18 +689,217 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+@app.route('/admin/delete_work/<int:work_id>', methods=['DELETE'])
+@login_required
+def delete_work(work_id):
+    if not current_user.is_admin:
+        return jsonify({'success': False, 'message': '권한이 없습니다.'}), 403
+    
+    try:
+        project = Project.query.get_or_404(work_id)
+        
+        # 이미지 파일 삭제
+        if project.image_path:
+            try:
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], project.image_path)
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+            except Exception as e:
+                logger.error(f"Failed to delete image file: {e}")
+        
+        db.session.delete(project)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': '프로젝트가 삭제되었습니다.'})
+    except Exception as e:
+        logger.error(f"Failed to delete project: {e}")
+        db.session.rollback()
+        return jsonify({'success': False, 'message': '삭제 중 오류가 발생했습니다.'}), 500
 
-# 애플리케이션 시작시 초기화
-if __name__ == '__main__':
+@app.route('/admin/edit_work/<int:work_id>', methods=['GET', 'POST'])
+@login_required
+def edit_work(work_id):
+    if not current_user.is_admin:
+        return redirect(url_for('index'))
+    
+    project = Project.query.get_or_404(work_id)
+    
+    if request.method == 'POST':
+        try:
+            # 폼 데이터 업데이트
+            project.title = request.form.get('title', '').strip()
+            project.description = request.form.get('description', '').strip()
+            project.detailed_description = request.form.get('detailed_description', '').strip()
+            project.project_type = request.form.get('project_type', '').strip()
+            project.category = request.form.get('category', '').strip()
+            project.my_role = request.form.get('my_role', '').strip()
+            project.tech_stack = request.form.get('tech_stack', '').strip()
+            project.github_url = request.form.get('github_url', '').strip() or None
+            project.demo_url = request.form.get('demo_url', '').strip() or None
+            project.video_url = request.form.get('video_url', '').strip() or None
+            project.achievements = request.form.get('achievements', '').strip() or None
+            project.metrics = request.form.get('metrics', '').strip() or None
+            project.is_featured = 'is_featured' in request.form
+            project.is_public = 'is_public' in request.form
+            project.sort_order = int(request.form.get('sort_order', 0))
+            
+            # 날짜 처리
+            start_date_str = request.form.get('start_date')
+            end_date_str = request.form.get('end_date')
+            
+            if start_date_str:
+                project.start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+            if end_date_str and 'is_ongoing' not in request.form:
+                project.end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            elif 'is_ongoing' in request.form:
+                project.end_date = None
+            
+            # 팀 크기 처리
+            team_size_str = request.form.get('team_size')
+            if team_size_str and team_size_str.isdigit():
+                project.team_size = int(team_size_str)
+            
+            # 새 이미지 업로드 처리
+            if 'image' in request.files:
+                file = request.files['image']
+                if file and file.filename:
+                    # 기존 이미지 삭제
+                    if project.image_path:
+                        try:
+                            old_file_path = os.path.join(app.config['UPLOAD_FOLDER'], project.image_path)
+                            if os.path.exists(old_file_path):
+                                os.remove(old_file_path)
+                        except Exception as e:
+                            logger.error(f"Failed to delete old image: {e}")
+                    
+                    # 새 이미지 저장
+                    filename = secure_filename(file.filename)
+                    name, ext = os.path.splitext(filename)
+                    filename = f"{name}_{int(datetime.now().timestamp())}{ext}"
+                    
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+                    file.save(file_path)
+                    
+                    # 이미지 최적화
+                    try:
+                        with Image.open(file_path) as img:
+                            if img.width > 1200:
+                                ratio = 1200 / img.width
+                                new_height = int(img.height * ratio)
+                                img = img.resize((1200, new_height), Image.Resampling.LANCZOS)
+                                img.save(file_path, optimize=True, quality=85)
+                    except Exception as e:
+                        logger.error(f"Image processing error: {e}")
+                    
+                    project.image_path = filename
+            
+            db.session.commit()
+            flash('프로젝트가 수정되었습니다.', 'success')
+            return redirect(url_for('admin'))
+            
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error updating project: {e}")
+            flash(f'프로젝트 수정 중 오류가 발생했습니다: {str(e)}', 'error')
+    
+    return render_template('edit_work.html', project=project)
+
+# API 엔드포인트들
+@app.route('/api/project/<int:project_id>/quick-view')
+def api_project_quick_view(project_id):
+    project = Project.query.get_or_404(project_id)
+    
+    if not project.is_public and (not current_user.is_authenticated or not current_user.is_admin):
+        return jsonify({'error': 'Access denied'}), 403
+    
+    return jsonify({
+        'id': project.id,
+        'title': project.title,
+        'description': project.description,
+        'tech_stack': project.tech_stack,
+        'achievements': project.achievements,
+        'github_url': project.github_url,
+        'demo_url': project.demo_url,
+        'image_path': project.image_path
+    })
+
+@app.route('/api/projects')
+def api_projects():
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 10))
+    project_type = request.args.get('type', 'all')
+    
+    query = Project.query.filter_by(is_public=True)
+    
+    if project_type != 'all':
+        query = query.filter_by(project_type=project_type)
+    
+    projects = query.order_by(Project.sort_order, Project.created_at.desc())\
+                   .paginate(page=page, per_page=per_page, error_out=False)
+    
+    return jsonify({
+        'projects': [
+            {
+                'id': p.id,
+                'title': p.title,
+                'description': p.description,
+                'project_type': p.project_type,
+                'tech_stack': p.tech_stack,
+                'image_path': p.image_path,
+                'github_url': p.github_url,
+                'demo_url': p.demo_url,
+                'created_at': p.created_at.isoformat()
+            } for p in projects.items
+        ],
+        'has_next': projects.has_next,
+        'has_prev': projects.has_prev,
+        'page': page,
+        'total': projects.total
+    })
+
+# 오류 핸들러
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500
+
+# 애플리케이션 팩토리 함수
+def create_app():
+    """애플리케이션 팩토리 함수"""
+    # 업로드 폴더 생성
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    
+    # 데이터베이스 안전 초기화
     with app.app_context():
         if not safe_init_db():
             logger.error("Failed to initialize database")
             raise RuntimeError("Database initialization failed")
+    
+    return app
+
+# 컨텍스트 프로세서 (템플릿에서 사용할 전역 변수)
+@app.context_processor
+def inject_global_vars():
+    return dict(
+        current_year=datetime.now().year,
+        app_version='1.0.0'
+    )
+
+# 애플리케이션 시작시 초기화
+if __name__ == '__main__':
+    # 개발 모드에서만 실행
+    app = create_app()
     app.run(host='0.0.0.0', port=5000, debug=False)
 else:
+    # 프로덕션 모드 (gunicorn 등)에서 실행
     with app.app_context():
-        safe_init_db()
+        try:
+            safe_init_db()
+        except Exception as e:
+            logger.error(f"Failed to initialize database in production: {e}")
+            # 프로덕션에서는 예외를 발생시키지 않고 로그만 기록
