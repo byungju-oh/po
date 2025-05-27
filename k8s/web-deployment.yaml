@@ -8,7 +8,7 @@ metadata:
     app: nginx
     tier: frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: nginx
@@ -20,7 +20,8 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: your-registry/portfolio-web:latest
+        image: portfolio-web:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 80
         resources:
@@ -59,10 +60,11 @@ metadata:
   labels:
     app: nginx
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - port: 80
     targetPort: 80
+    nodePort: 30080
     protocol: TCP
   selector:
     app: nginx

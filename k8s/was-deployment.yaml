@@ -8,7 +8,7 @@ metadata:
     app: flask
     tier: backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: flask
@@ -20,7 +20,8 @@ spec:
     spec:
       containers:
       - name: flask
-        image: your-registry/portfolio-was:latest
+        image: portfolio-was:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 5000
         env:
