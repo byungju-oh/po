@@ -23,6 +23,9 @@ spec:
         app: flask
         tier: backend
     spec:
+      # Pod 종료 시 graceful shutdown 시간 (올바른 위치)
+      terminationGracePeriodSeconds: 60
+      
       # 초기화 컨테이너로 DB 대기
       initContainers:
       - name: wait-for-db
@@ -43,6 +46,7 @@ spec:
           limits:
             memory: "64Mi"
             cpu: "100m"
+      
       containers:
       - name: flask
         image: portfolio-was:latest
@@ -109,8 +113,6 @@ spec:
         volumeMounts:
         - name: upload-storage
           mountPath: /app/uploads
-        # 애플리케이션 안전 종료를 위한 시간 설정
-        terminationGracePeriodSeconds: 60
         # 보안 컨텍스트
         securityContext:
           runAsNonRoot: true
@@ -120,12 +122,12 @@ spec:
           capabilities:
             drop:
             - ALL
+      
       volumes:
       - name: upload-storage
         persistentVolumeClaim:
           claimName: upload-pvc
-      # Pod 종료 시 graceful shutdown
-      terminationGracePeriodSeconds: 60
+      
       # Pod anti-affinity로 다른 노드에 분산 배치 (선택사항)
       affinity:
         podAntiAffinity:
@@ -139,6 +141,7 @@ spec:
                   values:
                   - flask
               topologyKey: kubernetes.io/hostname
+
 ---
 apiVersion: v1
 kind: Service
@@ -157,6 +160,7 @@ spec:
     name: http
   selector:
     app: flask
+
 ---
 apiVersion: v1
 kind: Secret
@@ -167,6 +171,7 @@ type: Opaque
 data:
   database-url: bXlzcWwrcHlteXNxbDovL3Jvb3Q6MTIzNEBteXNxbC1zZXJ2aWNlLmRiLnN2Yy5jbHVzdGVyLmxvY2FsOjMzMDYvcG9ydGZvbGlv  # mysql+pymysql://root:1234@mysql-service.db.svc.cluster.local:3306/portfolio
   secret-key: eW91ci1zZWNyZXQta2V5LWNoYW5nZS10aGlz  # your-secret-key-change-this
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -180,6 +185,7 @@ spec:
     requests:
       storage: 10Gi
   storageClassName: local-path
+
 ---
 # HorizontalPodAutoscaler (선택사항 - 자동 스케일링)
 apiVersion: autoscaling/v2
