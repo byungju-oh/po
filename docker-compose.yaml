@@ -61,6 +61,8 @@ services:
       - "443:443"
     volumes:
       - uploads_data:/var/www/html/uploads:ro
+      - certbot_conf:/etc/letsencrypt:ro
+      - certbot_www:/var/www/certbot:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
     depends_on:
       - flask-app
@@ -72,11 +74,31 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  # Certbot for SSL certificates
+  certbot:
+    image: certbot/certbot:latest
+    container_name: portfolio-certbot
+    volumes:
+      - certbot_conf:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    depends_on:
+      - nginx
+    networks:
+      - portfolio-network
+    # 인증서 갱신 명령 (수동 실행용)
+    # docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d your-domain.com
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
   mysql_data:
     driver: local
   uploads_data:
+    driver: local
+  certbot_conf:
+    driver: local
+  certbot_www:
     driver: local
 
 networks:
