@@ -650,7 +650,8 @@ def add_work():
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
+###################################################################################################
+#k3s
 @app.route('/health')
 def health():
     try:
@@ -666,6 +667,47 @@ def health():
         'timestamp': datetime.utcnow().isoformat(),
         'instance_id': get_instance_id()
     })
+
+
+#####################################################################################################
+#docker
+
+@app.route('/health')
+def health():
+    try:
+        # 간단한 DB 연결 테스트
+        db.session.execute(db.text('SELECT 1'))
+        db_status = 'healthy'
+    except Exception as e:
+        logger.error(f"Database health check failed: {e}")
+        db_status = 'unhealthy'
+        return jsonify({
+            'status': 'unhealthy',
+            'database': db_status,
+            'timestamp': datetime.utcnow().isoformat()
+        }), 503
+    
+    return jsonify({
+        'status': 'healthy',
+        'database': db_status,
+        'timestamp': datetime.utcnow().isoformat()
+    })
+
+
+
+
+
+
+#####################################################################################################
+
+
+
+
+
+
+
+
+
 
 @app.route('/readiness')
 def readiness():
