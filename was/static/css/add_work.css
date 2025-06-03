@@ -1,0 +1,663 @@
+/* static/css/pages/add_work.css - 프로젝트 추가 페이지 전용 스타일 */
+
+/* ========================
+   폼 섹션 스타일
+======================== */
+.form-section {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.section-header {
+    border-left: 4px solid var(--accent-color);
+    padding: 10px 15px;
+    background: rgba(103, 126, 234, 0.05);
+    border-radius: var(--border-radius-md);
+    margin-bottom: 20px;
+}
+
+.section-header h6 {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.section-header i {
+    color: var(--accent-color);
+    margin-right: 8px;
+}
+
+/* ========================
+   폼 컨트롤 스타일
+======================== */
+.form-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.form-label i {
+    color: var(--accent-color);
+    margin-right: 8px;
+    width: 20px;
+    text-align: center;
+}
+
+.form-control,
+.form-select {
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: 12px 16px;
+    transition: all var(--transition-normal);
+    background: white;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+    background: white;
+}
+
+.form-control:hover,
+.form-select:hover {
+    border-color: #adb5bd;
+}
+
+.form-text {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* 텍스트 영역 특별 스타일 */
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+#detailed_description {
+    min-height: 150px;
+}
+
+#achievements {
+    min-height: 120px;
+}
+
+/* ========================
+   기술 스택 섹션
+======================== */
+.tech-suggestions {
+    background: var(--bg-light);
+    padding: 15px;
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+    margin-top: 10px;
+}
+
+.tech-suggestions .form-label {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.tech-tag {
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    user-select: none;
+    display: inline-block;
+}
+
+.tech-tag:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.tech-tag.selected {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ========================
+   파일 업로드 섹션
+======================== */
+.form-control[type="file"] {
+    padding: 8px 12px;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button {
+    background: var(--gradient-accent);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: var(--border-radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+}
+
+/* 이미지 미리보기 */
+#imagePreviewContainer .card {
+    border: 2px dashed var(--border-color);
+    background: var(--bg-light);
+}
+
+#imagePreview {
+    max-width: 100%;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+/* ========================
+   체크박스와 스위치
+======================== */
+.form-check {
+    padding: 15px;
+    background: var(--bg-light);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+    margin-bottom: 10px;
+}
+
+.form-check:hover {
+    background: rgba(103, 126, 234, 0.05);
+    border-color: var(--accent-color);
+}
+
+.form-check-input {
+    margin-top: 0.25rem;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.form-check-label {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.form-check-label i {
+    margin-right: 6px;
+}
+
+.form-switch .form-check-input {
+    width: 2.5rem;
+    height: 1.25rem;
+}
+
+/* ========================
+   버튼 스타일
+======================== */
+.btn {
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: var(--border-radius-lg);
+    transition: all var(--transition-normal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn i {
+    margin-right: 6px;
+}
+
+.btn-primary {
+    background: var(--gradient-accent);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.btn-outline-primary:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-outline-danger {
+    border: 2px solid #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* ========================
+   사이드바 카드
+======================== */
+.card {
+    border-radius: var(--border-radius-2xl);
+    border: none;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--bg-light), #e9ecef);
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px 25px;
+}
+
+.card-header h5 {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.card-header i {
+    color: var(--accent-color);
+    margin-right: 8px;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+/* ========================
+   가이드 섹션
+======================== */
+.guide-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.guide-item:last-child {
+    border-bottom: none;
+}
+
+.guide-item h6 {
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.guide-item ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.guide-item li {
+    margin-bottom: 5px;
+    line-height: 1.5;
+}
+
+/* ========================
+   템플릿 버튼
+======================== */
+.template-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.template-buttons .btn {
+    justify-content: flex-start;
+    text-align: left;
+    padding: 12px 16px;
+    border-radius: var(--border-radius-lg);
+    transition: all var(--transition-normal);
+}
+
+.template-buttons .btn:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-md);
+}
+
+.template-buttons .btn i {
+    width: 20px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+/* ========================
+   최근 프로젝트 목록
+======================== */
+.recent-project-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f3f4;
+    transition: all var(--transition-normal);
+}
+
+.recent-project-item:last-child {
+    border-bottom: none;
+}
+
+.recent-project-item:hover {
+    background: rgba(103, 126, 234, 0.05);
+    padding-left: 10px;
+    border-radius: var(--border-radius-lg);
+}
+
+.recent-project-item img,
+.recent-project-item .bg-light {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.recent-project-item .bg-light {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+}
+
+.recent-project-item h6 {
+    margin: 0 0 5px 0;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+.recent-project-item small {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* ========================
+   유효성 검사 스타일
+======================== */
+.is-invalid {
+    border-color: #dc3545;
+    animation: shake 0.5s ease-in-out;
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.is-valid {
+    border-color: #28a745;
+}
+
+.valid-feedback {
+    display: block;
+    color: #28a745;
+    font-size: 0.875rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+/* ========================
+   로딩 상태
+======================== */
+.form-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.form-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    animation: loading 1.5s infinite;
+    pointer-events: none;
+}
+
+@keyframes loading {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ========================
+   반응형 디자인
+======================== */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .section-header {
+        padding: 8px 12px;
+        margin-bottom: 15px;
+    }
+    
+    .form-control,
+    .form-select {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+    
+    .card-body {
+        padding: 20px;
+    }
+    
+    .card-header {
+        padding: 15px 20px;
+    }
+    
+    .tech-tags {
+        gap: 6px;
+    }
+    
+    .tech-tag {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+    
+    .form-check {
+        padding: 10px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .guide-item {
+        padding: 10px 0;
+    }
+    
+    .recent-project-item img,
+    .recent-project-item .bg-light {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        margin-bottom: 20px;
+    }
+    
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .d-flex.justify-content-between > div {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .btn {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .tech-tags {
+        justify-content: center;
+    }
+    
+    .template-buttons .btn {
+        font-size: 0.85rem;
+        padding: 10px 14px;
+    }
+    
+    #imagePreviewContainer img {
+        max-height: 200px;
+    }
+}
+
+/* ========================
+   접근성 개선
+======================== */
+@media (prefers-reduced-motion: reduce) {
+    .form-control,
+    .btn,
+    .tech-tag,
+    .card {
+        transition: none;
+    }
+    
+    .is-invalid {
+        animation: none;
+    }
+    
+    @keyframes loading {
+        0%, 100% { left: -100%; }
+    }
+}
+
+.using-keyboard .form-control:focus,
+.using-keyboard .btn:focus,
+.using-keyboard .form-check-input:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid var(--primary-color);
+    }
+    
+    .form-control,
+    .form-select {
+        border-width: 2px;
+    }
+    
+    .tech-tag {
+        border-width: 2px;
+    }
+}
+
+/* ========================
+   다크 모드 지원
+======================== */
+@media (prefers-color-scheme: dark) {
+    .card {
+        background: var(--bg-dark);
+        color: white;
+    }
+    
+    .card-header {
+        background: #495057;
+        color: white;
+    }
+    
+    .form-control,
+    .form-select {
+        background: var(--bg-dark);
+        color: white;
+        border-color: #495057;
+    }
+    
+    .form-check {
+        background: #495057;
+        border-color: #6c757d;
+    }
+    
+    .tech-suggestions {
+        background: #495057;
+        border-color: #6c757d;
+    }
+    
+    .tech-tag {
+        background: var(--bg-dark);
+        color: white;
+        border-color: #6c757d;
+    }
+}
