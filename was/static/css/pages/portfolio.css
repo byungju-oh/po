@@ -1,0 +1,831 @@
+/* static/css/pages/portfolio.css - 포트폴리오 페이지 전용 스타일 */
+
+/* ========================
+   포트폴리오 헤더
+======================== */
+.portfolio-header {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 80px 0 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.portfolio-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    pointer-events: none;
+}
+
+.portfolio-stats {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius-2xl);
+    padding: 30px;
+    margin-top: 40px;
+}
+
+.portfolio-stat-item {
+    text-align: center;
+    color: white;
+}
+
+.portfolio-stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.portfolio-stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* ========================
+   필터 시스템
+======================== */
+.portfolio-filters {
+    background: white;
+    padding: 40px;
+    border-radius: var(--border-radius-2xl);
+    box-shadow: var(--shadow-lg);
+    margin: -30px auto 50px;
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+}
+
+.filter-group {
+    margin-bottom: 30px;
+}
+
+.filter-group:last-child {
+    margin-bottom: 0;
+}
+
+.filter-label {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
+.filter-label i {
+    margin-right: 8px;
+    color: var(--accent-color);
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.filter-button {
+    background: white;
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    min-height: 44px;
+}
+
+.filter-button:hover {
+    border-color: var(--accent-color);
+    background: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.filter-button.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+.filter-button .badge {
+    margin-left: 8px;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+}
+
+.filter-button.active .badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* 검색 필터 */
+.search-filter {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    border: 2px solid var(--border-color);
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: all var(--transition-normal);
+    background: white;
+}
+
+.search-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* ========================
+   프로젝트 그리드
+======================== */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.portfolio-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all var(--transition-slow);
+}
+
+.portfolio-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.portfolio-item.filtering {
+    transform: scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.portfolio-item.filtered-out {
+    display: none;
+}
+
+/* 프로젝트 카드 향상 */
+.project-card-enhanced {
+    background: white;
+    border-radius: var(--border-radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-normal);
+    border: none;
+    height: 100%;
+    position: relative;
+}
+
+.project-card-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(103, 126, 234, 0.05) 100%);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.project-card-enhanced:hover::before {
+    opacity: 1;
+}
+
+.project-card-enhanced:hover {
+    transform: translateY(-15px) rotateX(5deg);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+}
+
+/* 프로젝트 이미지 컨테이너 */
+.project-image-container {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    background: var(--gradient-primary);
+}
+
+.project-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.project-card-enhanced:hover .project-image-container img {
+    transform: scale(1.15) rotate(1deg);
+}
+
+/* 프로젝트 오버레이 개선 */
+.project-overlay-enhanced {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(103, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(10px);
+}
+
+.project-card-enhanced:hover .project-overlay-enhanced {
+    opacity: 1;
+}
+
+.project-overlay-content-enhanced {
+    text-align: center;
+    color: white;
+    transform: translateY(20px);
+    transition: transform var(--transition-normal);
+}
+
+.project-card-enhanced:hover .project-overlay-content-enhanced {
+    transform: translateY(0);
+}
+
+.project-overlay-content-enhanced .btn {
+    margin: 5px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* 프로젝트 메타데이터 */
+.project-metadata {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 2;
+}
+
+.project-type-badge-enhanced {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--primary-color);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.project-featured-badge {
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    color: #b45309;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 프로젝트 콘텐츠 */
+.project-content-enhanced {
+    padding: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+.project-title-enhanced {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.project-description-enhanced {
+    color: var(--text-muted);
+    margin-bottom: 15px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.project-tech-stack-enhanced {
+    margin-bottom: 20px;
+    min-height: 32px;
+}
+
+.tech-stack-item {
+    display: inline-block;
+    background: var(--bg-light);
+    color: var(--text-color);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 2px 4px 2px 0;
+    transition: all var(--transition-normal);
+}
+
+.tech-stack-item:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* 프로젝트 통계 및 메타 */
+.project-stats-enhanced {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 20px;
+}
+
+.project-stat-group {
+    display: flex;
+    gap: 15px;
+}
+
+.project-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.project-stat-item i {
+    font-size: 0.9rem;
+}
+
+.project-actions-enhanced {
+    display: flex;
+    gap: 8px;
+}
+
+.project-action-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.project-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ========================
+   정렬 및 뷰 옵션
+======================== */
+.portfolio-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.view-options {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.view-toggle {
+    display: flex;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.view-toggle-btn {
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.view-toggle-btn.active {
+    background: var(--accent-color);
+    color: white;
+}
+
+.sort-dropdown {
+    position: relative;
+}
+
+.sort-select {
+    appearance: none;
+    background: white;
+    border: 2px solid var(--border-color);
+    padding: 10px 40px 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.sort-select:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+.results-count {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* ========================
+   그리드 뷰 변형
+======================== */
+.portfolio-grid.list-view {
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.portfolio-grid.list-view .project-card-enhanced {
+    display: flex;
+    height: 200px;
+}
+
+.portfolio-grid.list-view .project-image-container {
+    width: 300px;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.portfolio-grid.list-view .project-content-enhanced {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.portfolio-grid.compact-view {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.portfolio-grid.compact-view .project-image-container {
+    height: 180px;
+}
+
+/* ========================
+   로딩 및 빈 상태
+======================== */
+.portfolio-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: var(--text-muted);
+}
+
+.loading-spinner {
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.portfolio-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-muted);
+}
+
+.portfolio-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.portfolio-empty-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.portfolio-empty-description {
+    margin-bottom: 30px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ========================
+   무한 스크롤
+======================== */
+.load-more-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.load-more-btn {
+    background: var(--gradient-accent);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.load-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.load-more-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.load-more-spinner {
+    margin-right: 8px;
+    animation: spin 1s linear infinite;
+}
+
+/* ========================
+   필터 애니메이션
+======================== */
+.filter-animation-enter {
+    animation: filterEnter 0.6s ease forwards;
+}
+
+.filter-animation-exit {
+    animation: filterExit 0.4s ease forwards;
+}
+
+@keyframes filterEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes filterExit {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.8) translateY(-20px);
+    }
+}
+
+/* ========================
+   반응형 디자인
+======================== */
+@media (max-width: 1200px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .portfolio-header {
+        padding: 60px 0 40px;
+    }
+    
+    .portfolio-filters {
+        padding: 25px;
+        margin: -20px 15px 30px;
+    }
+    
+    .filter-buttons {
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .filter-button {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 15px;
+    }
+    
+    .portfolio-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    
+    .view-options {
+        justify-content: center;
+    }
+    
+    .project-card-enhanced:hover {
+        transform: translateY(-5px);
+    }
+    
+    .project-overlay-enhanced {
+        opacity: 1;
+        background: linear-gradient(135deg, rgba(103, 126, 234, 0.7), rgba(118, 75, 162, 0.7));
+    }
+    
+    .portfolio-grid.list-view .project-card-enhanced {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .portfolio-grid.list-view .project-image-container {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .portfolio-stat-item {
+        margin-bottom: 20px;
+    }
+    
+    .portfolio-stat-number {
+        font-size: 2rem;
+    }
+    
+    .filter-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-button {
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+    
+    .project-image-container {
+        height: 200px;
+    }
+    
+    .project-content-enhanced {
+        padding: 20px;
+    }
+    
+    .project-actions-enhanced {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .project-action-btn {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+/* ========================
+   접근성 개선
+======================== */
+@media (prefers-reduced-motion: reduce) {
+    .project-card-enhanced,
+    .project-image-container img,
+    .portfolio-item,
+    .filter-button {
+        transition: none;
+    }
+    
+    .portfolio-item {
+        opacity: 1;
+        transform: none;
+    }
+    
+    @keyframes spin {
+        0% { transform: none; }
+        100% { transform: none; }
+    }
+}
+
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--accent-color);
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: top 0.3s;
+    z-index: 1000;
+}
+
+.skip-to-content:focus {
+    top: 6px;
+}
+
+/* ========================
+   다크 모드 지원
+======================== */
+@media (prefers-color-scheme: dark) {
+    .portfolio-filters {
+        background: var(--bg-dark);
+        color: white;
+    }
+    
+    .filter-button {
+        background: var(--bg-dark);
+        color: white;
+        border-color: #495057;
+    }
+    
+    .project-card-enhanced {
+        background: var(--bg-dark);
+        color: white;
+    }
+    
+    .tech-stack-item {
+        background: #495057;
+        color: white;
+    }
+    
+    .search-input {
+        background: var(--bg-dark);
+        color: white;
+        border-color: #495057;
+    }
+}
+
+/* ========================
+   프린트 스타일
+======================== */
+@media print {
+    .portfolio-filters,
+    .portfolio-controls,
+    .load-more-container {
+        display: none;
+    }
+    
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .project-card-enhanced {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .project-overlay-enhanced {
+        display: none;
+    }
+}

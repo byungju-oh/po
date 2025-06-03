@@ -1,0 +1,699 @@
+/* static/css/components.css - 재사용 가능한 컴포넌트 스타일 */
+
+/* ========================
+   카드 컴포넌트
+======================== */
+.card-base {
+    background: white;
+    border-radius: var(--border-radius-2xl);
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-normal);
+    border: none;
+    overflow: hidden;
+}
+
+.card-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+}
+
+.card-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.card-scale:hover {
+    transform: scale(1.02);
+}
+
+/* ========================
+   버튼 컴포넌트
+======================== */
+.btn-gradient {
+    background: var(--gradient-accent);
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all var(--transition-normal);
+}
+
+.btn-gradient:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+}
+
+.btn-outline-gradient {
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    font-weight: 600;
+    transition: all var(--transition-normal);
+}
+
+.btn-outline-gradient:hover {
+    background: var(--gradient-accent);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-filter {
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.btn-filter:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-filter .badge {
+    font-size: 0.75rem;
+}
+
+/* ========================
+   섹션 헤더
+======================== */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-align: center;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin: 0;
+}
+
+.section-header {
+    margin-bottom: 50px;
+}
+
+/* ========================
+   네비게이션
+======================== */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-color), #34495e);
+    box-shadow: var(--shadow-md);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    transition: color var(--transition-normal);
+}
+
+.nav-link:hover {
+    color: var(--accent-color) !important;
+}
+
+/* ========================
+   플래시 메시지
+======================== */
+.flash-messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+.alert {
+    border: none;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+/* ========================
+   프로젝트 카드
+======================== */
+.project-card {
+    background: white;
+    border-radius: var(--border-radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-normal);
+    border: none;
+    height: 100%;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+}
+
+.project-image {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+}
+
+.project-card:hover .project-image img {
+    transform: scale(1.1);
+}
+
+.project-placeholder {
+    height: 100%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.project-type-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 2;
+}
+
+.project-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.project-card:hover .project-overlay {
+    opacity: 1;
+}
+
+.project-overlay-content {
+    text-align: center;
+}
+
+.project-meta {
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.project-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ========================
+   기술 스택 컴포넌트
+======================== */
+.tech-category-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: var(--border-radius-2xl);
+    box-shadow: var(--shadow-lg);
+    height: 100%;
+    transition: all var(--transition-normal);
+}
+
+.tech-category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.tech-category-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.tech-category-header h5 {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.tech-skill-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: var(--bg-light);
+    border-radius: var(--border-radius-lg);
+    transition: all var(--transition-normal);
+}
+
+.tech-skill-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.tech-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.tech-info i {
+    width: 25px;
+    font-size: 1.2rem;
+    margin-right: 10px;
+    color: #495057;
+}
+
+.tech-name {
+    flex: 1;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.proficiency-text {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 0.9rem;
+}
+
+.progress-container {
+    margin-bottom: 5px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s ease-in-out;
+}
+
+/* ========================
+   기술 태그 및 배지
+======================== */
+.tech-stack .badge {
+    font-size: 0.75rem;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 4px 8px;
+    border-radius: var(--border-radius-lg);
+}
+
+.tech-badge {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-normal);
+}
+
+.tech-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.tech-tag {
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    user-select: none;
+    display: inline-block;
+    margin: 4px;
+}
+
+.tech-tag:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    transform: translateY(-1px);
+}
+
+.tech-tag.selected {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.tech-badge-small {
+    background: #e9ecef;
+    color: #495057;
+    font-size: 0.75rem;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 4px 8px;
+    border-radius: var(--border-radius-lg);
+    font-weight: 500;
+}
+
+.skill-badge {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    margin-right: 8px;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+}
+
+/* ========================
+   통계 카드
+======================== */
+.stat-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: var(--border-radius-2xl);
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--transition-normal);
+    text-align: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 15px 0 5px;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    color: var(--text-muted);
+    font-weight: 500;
+    margin: 0;
+}
+
+/* ========================
+   타임라인
+======================== */
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--gradient-primary);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 50px;
+    padding-left: 120px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 35px;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    background: white;
+    border: 4px solid #667eea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #667eea;
+    font-size: 0.9rem;
+    z-index: 2;
+    box-shadow: 0 0 0 4px white;
+}
+
+.timeline-content {
+    background: white;
+    padding: 30px;
+    border-radius: var(--border-radius-2xl);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    transition: transform var(--transition-normal);
+}
+
+.timeline-content:hover {
+    transform: translateX(10px);
+}
+
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    left: -15px;
+    top: 20px;
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 15px solid white;
+}
+
+.timeline-date {
+    color: #667eea;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+/* ========================
+   자격증 카드
+======================== */
+.cert-card {
+    background: white;
+    border-radius: var(--border-radius-2xl);
+    padding: 25px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-normal);
+    height: 100%;
+}
+
+.cert-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.cert-header {
+    margin-bottom: 20px;
+}
+
+.cert-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.cert-issuer {
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.cert-date {
+    color: #495057;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+/* ========================
+   필터 및 검색
+======================== */
+.filter-section {
+    background: white;
+    padding: 30px;
+    border-radius: var(--border-radius-2xl);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 30px;
+}
+
+.filter-label {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tech-filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* ========================
+   폼 컴포넌트
+======================== */
+.form-section {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.section-header {
+    border-left: 4px solid var(--accent-color);
+    padding: 10px 15px;
+    background: rgba(103, 126, 234, 0.05);
+    border-radius: var(--border-radius-md);
+    margin-bottom: 20px;
+}
+
+.tech-suggestions {
+    background: var(--bg-light);
+    padding: 15px;
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* ========================
+   모달 및 오버레이
+======================== */
+.modal-content {
+    border-radius: var(--border-radius-2xl);
+    border: none;
+    box-shadow: var(--shadow-xl);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-color);
+}
+
+/* ========================
+   빈 상태
+======================== */
+.empty-state {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.empty-state i {
+    opacity: 0.5;
+}
+
+/* ========================
+   반응형 조정
+======================== */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .card-base,
+    .project-card,
+    .tech-category-card {
+        margin-bottom: 20px;
+    }
+    
+    .timeline::before {
+        left: 15px;
+    }
+    
+    .timeline-item {
+        padding-left: 50px;
+    }
+    
+    .timeline-marker {
+        left: 0;
+        width: 25px;
+        height: 25px;
+        font-size: 0.8rem;
+    }
+    
+    .timeline-content::before {
+        display: none;
+    }
+    
+    .filter-buttons {
+        justify-content: center;
+    }
+    
+    .tech-filter-tags {
+        justify-content: center;
+    }
+    
+    .project-overlay {
+        opacity: 1;
+        background: rgba(0,0,0,0.6);
+    }
+}
+
+@media (max-width: 576px) {
+    .filter-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-filter {
+        justify-content: center;
+        margin-bottom: 5px;
+    }
+}
