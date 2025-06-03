@@ -27,7 +27,7 @@ services:
   flask-app:
     build: 
       context: ./was
-      dockerfile: Dockerfile
+      dockerfile: compose
     container_name: portfolio-flask
     environment:
       DATABASE_URL: mysql+pymysql://root:1234@mysql:3306/portfolio
@@ -54,7 +54,7 @@ services:
   nginx:
     build:
       context: ./web
-      dockerfile: Dockerfile
+      dockerfile: compose
     container_name: portfolio-nginx
     ports:
       - "80:80"
