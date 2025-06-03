@@ -1,0 +1,643 @@
+/* static/css/pages/login.css - 로그인 페이지 전용 스타일 */
+
+/* ========================
+   로그인 컨테이너 배경
+======================== */
+.login-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" fill-opacity="0.05"/><circle cx="75" cy="75" r="1" fill="white" fill-opacity="0.05"/><circle cx="50" cy="10" r="1" fill="white" fill-opacity="0.03"/><circle cx="80" cy="40" r="1" fill="white" fill-opacity="0.03"/><circle cx="20" cy="80" r="1" fill="white" fill-opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    pointer-events: none;
+}
+
+/* ========================
+   로그인 카드 스타일
+======================== */
+.card {
+    border-radius: var(--border-radius-2xl);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.login-header h3 {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.login-header p {
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+/* ========================
+   카드 바디 스타일
+======================== */
+.card-body {
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.98);
+}
+
+/* ========================
+   폼 요소 스타일
+======================== */
+.form-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.form-label i {
+    color: var(--accent-color);
+    width: 20px;
+}
+
+.form-control {
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: 12px 16px;
+    font-size: 1rem;
+    transition: all var(--transition-normal);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+    background: white;
+    transform: translateY(-1px);
+}
+
+.form-control:hover {
+    border-color: #adb5bd;
+}
+
+.form-control::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* 입력 그룹 스타일 */
+.input-group {
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+.input-group .form-control {
+    border-right: none;
+    border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
+}
+
+.input-group .btn {
+    border-left: none;
+    border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
+    border-color: var(--border-color);
+    background: rgba(248, 249, 250, 0.8);
+    transition: all var(--transition-normal);
+}
+
+.input-group .btn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+/* 비밀번호 토글 버튼 */
+#togglePassword {
+    cursor: pointer;
+    min-width: 50px;
+}
+
+#togglePassword i {
+    transition: transform var(--transition-fast);
+}
+
+#togglePassword:hover i {
+    transform: scale(1.1);
+}
+
+/* ========================
+   체크박스 스타일
+======================== */
+.form-check {
+    padding: 15px;
+    background: rgba(248, 249, 250, 0.5);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+}
+
+.form-check:hover {
+    background: rgba(103, 126, 234, 0.05);
+    border-color: var(--accent-color);
+}
+
+.form-check-input {
+    margin-top: 0.25rem;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.form-check-label {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-left: 8px;
+}
+
+/* ========================
+   로그인 버튼 스타일
+======================== */
+.btn-primary {
+    background: var(--gradient-accent);
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 15px 30px;
+    border-radius: var(--border-radius-lg);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ========================
+   카드 푸터 스타일
+======================== */
+.card-footer {
+    background: var(--bg-light);
+    border-top: 1px solid var(--border-color);
+    padding: 20px;
+}
+
+.card-footer .btn-link {
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: color var(--transition-normal);
+    text-decoration: none;
+}
+
+.card-footer .btn-link:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+/* ========================
+   보안 알림 스타일
+======================== */
+.alert-info {
+    background: rgba(23, 162, 184, 0.1);
+    border: 1px solid rgba(23, 162, 184, 0.2);
+    color: #0c5460;
+    border-radius: var(--border-radius-lg);
+    backdrop-filter: blur(10px);
+}
+
+.alert-info strong {
+    color: #0a4248;
+}
+
+/* ========================
+   도움말 모달 스타일
+======================== */
+.modal-content {
+    border-radius: var(--border-radius-2xl);
+    border: none;
+    box-shadow: var(--shadow-xl);
+}
+
+.modal-header {
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: var(--border-radius-2xl) var(--border-radius-2xl) 0 0;
+}
+
+.modal-title {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.help-section {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.help-section:last-child {
+    border-bottom: none;
+}
+
+.help-section h6 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.help-section .alert {
+    border-radius: var(--border-radius-lg);
+    border: none;
+    font-size: 0.9rem;
+}
+
+.help-section .alert-warning {
+    background: rgba(255, 193, 7, 0.1);
+    color: #856404;
+}
+
+.help-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.help-section li {
+    margin-bottom: 5px;
+    line-height: 1.5;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 20px 30px;
+}
+
+/* ========================
+   유효성 검사 스타일
+======================== */
+.is-invalid {
+    border-color: #dc3545;
+    animation: shake 0.5s ease-in-out;
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.login-error {
+    animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================
+   로딩 상태 스타일
+======================== */
+.form-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.form-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* ========================
+   Caps Lock 경고
+======================== */
+.caps-lock-warning {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================
+   반응형 디자인
+======================== */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 20px;
+    }
+    
+    .card-body {
+        padding: 30px 25px;
+    }
+    
+    .card-header {
+        padding: 25px 20px;
+    }
+    
+    .login-header h3 {
+        font-size: 1.5rem;
+    }
+    
+    .login-header i {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+    
+    .form-control {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+    }
+    
+    .btn-primary {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .card-footer {
+        padding: 15px;
+    }
+    
+    .card-footer .row .col-6 {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        margin: 15px;
+    }
+    
+    .card-body {
+        padding: 25px 20px;
+    }
+    
+    .login-header {
+        padding: 0 10px;
+    }
+    
+    .form-control {
+        font-size: 16px; /* iOS에서 줌 방지 */
+    }
+    
+    .card-footer .row {
+        flex-direction: column;
+    }
+    
+    .card-footer .col-6 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .alert {
+        margin: 10px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ========================
+   접근성 개선
+======================== */
+@media (prefers-reduced-motion: reduce) {
+    .card,
+    .form-control,
+    .btn-primary,
+    .login-header i {
+        animation: none;
+        transition: none;
+    }
+    
+    .is-invalid {
+        animation: none;
+    }
+}
+
+.using-keyboard .form-control:focus,
+.using-keyboard .btn:focus,
+.using-keyboard .form-check-input:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid var(--primary-color);
+    }
+    
+    .form-control {
+        border-width: 2px;
+    }
+    
+    .btn-primary {
+        border: 2px solid var(--accent-color);
+    }
+}
+
+/* ========================
+   다크 모드 지원
+======================== */
+@media (prefers-color-scheme: dark) {
+    .card {
+        background: rgba(33, 37, 41, 0.95);
+        color: #e9ecef;
+    }
+    
+    .card-body {
+        background: rgba(33, 37, 41, 0.98);
+    }
+    
+    .card-footer {
+        background: #495057;
+        border-color: #6c757d;
+    }
+    
+    .form-control {
+        background: rgba(52, 58, 64, 0.8);
+        border-color: #6c757d;
+        color: #e9ecef;
+    }
+    
+    .form-control::placeholder {
+        color: #adb5bd;
+    }
+    
+    .form-check {
+        background: rgba(52, 58, 64, 0.5);
+        border-color: #6c757d;
+    }
+    
+    .input-group .btn {
+        background: rgba(52, 58, 64, 0.8);
+        border-color: #6c757d;
+        color: #e9ecef;
+    }
+    
+    .modal-content {
+        background: #212529;
+        color: #e9ecef;
+    }
+    
+    .modal-header {
+        background: #343a40;
+        border-color: #495057;
+    }
+}
+
+/* ========================
+   프린트 스타일
+======================== */
+@media print {
+    .login-container {
+        background: white;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .btn,
+    .modal {
+        display: none;
+    }
+    
+    .form-control {
+        border: 1px solid #ddd;
+        background: white;
+    }
+}keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary-color), #34495e) !important;
+    border: none;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.05) 2px,
+        rgba(255, 255, 255, 0.05) 4px
+    );
+    animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.login-header {
+    position: relative;
+    z-index: 2;
+}
+
+.login-header i {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@
